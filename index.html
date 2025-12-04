@@ -7,26 +7,32 @@
 
 <script>
   function openApp() {
-    // Đợi trang load xong để tránh bị chặn
     setTimeout(() => {
       const start = Date.now();
 
-      // ----- METHOD 1: Safari iOS fix (anchor click) -----
+      // --- Detect OS ---
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      // --- Choose correct scheme ---
+      const scheme = isIOS 
+        ? "org.reactjs.native.HiStaffOf://" 
+        : "histaff://";
+
+      // --- Safari fix ---
       const a = document.createElement('a');
-      a.href = "histaff://";
+      a.href = scheme;
       a.click();
 
-      // ----- METHOD 2: Android fix (iframe bypass) -----
+      // --- Chrome/Android fix ---
       const iframe = document.createElement("iframe");
       iframe.style.display = "none";
-      iframe.src = "histaff://";
+      iframe.src = scheme;
       document.body.appendChild(iframe);
 
-      // ----- FALLBACK nếu app không mở -----
+      // --- Fallback ---
       setTimeout(() => {
         if (Date.now() - start < 1800) {
-          // App không mở
-          if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          if (isIOS) {
             window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
           } else {
             window.location = "https://play.google.com/store/apps/details?id=com.histaff";
@@ -34,19 +40,15 @@
         }
       }, 1800);
 
-    }, 250); // delay đảm bảo DOM loaded
+    }, 250);
   }
 </script>
 
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     text-align: center;
     padding-top: 60px;
-  }
-  h2 {
-    font-size: 22px;
-    font-weight: bold;
   }
 </style>
 

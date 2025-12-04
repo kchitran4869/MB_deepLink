@@ -3,35 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>Open HiStaff App</title>
 
-  <script>
-    function openApp() {
-      var now = Date.now();
-      var iframe = document.createElement("iframe");
+<script>
+  function openApp() {
+    // Đợi trang load xong để tránh bị chặn
+    setTimeout(() => {
+      const start = Date.now();
 
-      // Hidden iframe – method WORKS on more browsers
+      // ----- METHOD 1: Safari iOS fix (anchor click) -----
+      const a = document.createElement('a');
+      a.href = "histaff://";
+      a.click();
+
+      // ----- METHOD 2: Android fix (iframe bypass) -----
+      const iframe = document.createElement("iframe");
       iframe.style.display = "none";
       iframe.src = "histaff://";
       document.body.appendChild(iframe);
 
-      setTimeout(function () {
-        // If app didn't open after ~1500ms => fallback to store
-        if (Date.now() - now < 1500) {
+      // ----- FALLBACK nếu app không mở -----
+      setTimeout(() => {
+        if (Date.now() - start < 1800) {
+          // App không mở
           if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
           } else {
             window.location = "https://play.google.com/store/apps/details?id=com.histaff";
           }
         }
-      }, 1500);
-    }
-  </script>
+      }, 1800);
+
+    }, 250); // delay đảm bảo DOM loaded
+  }
+</script>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 60px;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: bold;
+  }
+</style>
+
 </head>
 
 <body onload="openApp()">
   <h2>Đang mở ứng dụng HiStaff...</h2>
-  <p>Nếu ứng dụng không mở, bạn sẽ được chuyển đến cửa hàng cài đặt.</p>
+  <p>Nếu ứng dụng không mở, bạn sẽ được chuyển đến App Store hoặc Google Play.</p>
 </body>
 </html>

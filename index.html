@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Open HiStaff App</title>
+
+  <script>
+    function openApp() {
+      // Try to open the app using the custom scheme
+      window.location = "histaff://";
+
+      // If app is NOT installed, redirect to store after delay
+      setTimeout(function () {
+        // iOS
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
+        }
+        // Android
+        else {
+          window.location = "https://play.google.com/store/apps/details?id=com.histaff";
+        }
+      }, 1200); // Delay before fallback (1.2 seconds)
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    h2 {
+      color: #333;
+    }
+  </style>
+</head>
+
+<body onload="openApp()">
+  <h2>Đang mở ứng dụng HiStaff...</h2>
+  <p>Nếu ứng dụng không mở, bạn sẽ được chuyển tới App Store / Play Store.</p>
+</body>
+</html>

@@ -11,36 +11,44 @@
       const start = Date.now();
 
       // --- Detect OS ---
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const ua = navigator.userAgent;
+      const isIOS = /iPhone|iPad|iPod/i.test(ua);
+      const isAndroid = /Android/i.test(ua);
+
+      // --- If NOT Android & NOT iOS => open fallback website immediately ---
+      if (!isIOS && !isAndroid) {
+        window.location = "https://pvnm24-face-dev.histaff.online/Attendance/ApproveInfo";
+        return;
+      }
 
       // --- Choose correct scheme ---
       const scheme = isIOS 
         ? "org.reactjs.native.HiStaffOf://" 
         : "histaff://";
 
-      // --- Safari fix ---
+      // --- Safari iOS fix (anchor click) ---
       const a = document.createElement('a');
       a.href = scheme;
       a.click();
 
-      // --- Chrome/Android fix ---
+      // --- Chrome/Android fix (iframe bypass) ---
       const iframe = document.createElement("iframe");
       iframe.style.display = "none";
       iframe.src = scheme;
       document.body.appendChild(iframe);
 
-      // --- Fallback ---
+      // --- Fallback (app not opened) ---
       setTimeout(() => {
         if (Date.now() - start < 1800) {
           if (isIOS) {
             window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
-          } else {
+          } else if (isAndroid) {
             window.location = "https://play.google.com/store/apps/details?id=com.histaff";
           }
         }
       }, 1800);
 
-    }, 250);
+    }, 250); // Small delay ensures DOM loaded
   }
 </script>
 
@@ -56,6 +64,5 @@
 
 <body onload="openApp()">
   <h2>Đang mở ứng dụng HiStaff...</h2>
-  <p>Nếu ứng dụng không mở, bạn sẽ được chuyển đến App Store hoặc Google Play.</p>
 </body>
 </html>

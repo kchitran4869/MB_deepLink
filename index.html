@@ -7,48 +7,36 @@
 
 <script>
   function openApp() {
-    setTimeout(() => {
-      const start = Date.now();
+    const ua = navigator.userAgent;
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
 
-      // --- Detect OS ---
-      const ua = navigator.userAgent;
-      const isIOS = /iPhone|iPad|iPod/i.test(ua);
-      const isAndroid = /Android/i.test(ua);
+    // Device không phải mobile → mở web
+    if (!isIOS && !isAndroid) {
+      window.location = "https://hs-portal.vinamilk.com.vn/Attendance/ApproveInfo";
+      return;
+    }
 
-      // --- If NOT Android & NOT iOS => open fallback website immediately ---
-      if (!isIOS && !isAndroid) {
-        window.location = "https://hs-portal.vinamilk.com.vn/Attendance/ApproveInfo";
-        return;
-      }
+    // --- iOS Deep Linking ---
+    if (isIOS) {
+      window.location = "org.reactjs.native.HiStaffOf://";
 
-      // --- Choose correct scheme ---
-      const scheme = isIOS 
-        ? "org.reactjs.native.HiStaffOf://" 
-        : "histaff://";
-
-      // --- Safari iOS fix (anchor click) ---
-      const a = document.createElement('a');
-      a.href = scheme;
-      a.click();
-
-      // --- Chrome/Android fix (iframe bypass) ---
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.src = scheme;
-      document.body.appendChild(iframe);
-
-      // --- Fallback (app not opened) ---
       setTimeout(() => {
-        if (Date.now() - start < 1800) {
-          if (isIOS) {
-            window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
-          } else if (isAndroid) {
-            window.location = "https://play.google.com/store/apps/details?id=com.histaff";
-          }
-        }
-      }, 1800);
+        window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
+      }, 1500);
 
-    }, 250); // Small delay ensures DOM loaded
+      return;
+    }
+
+    // --- ANDROID DEEP LINKING ---
+    // 1. Thử mở app bằng custom scheme
+    window.location = "histaff://";
+
+    // 2. Dùng intent:// fallback nếu app không cài
+    setTimeout(() => {
+      window.location = 
+        "intent://#Intent;scheme=histaff;package=com.histaff;end;";
+    }, 800);
   }
 </script>
 

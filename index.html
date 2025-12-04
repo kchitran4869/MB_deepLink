@@ -2,43 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Open HiStaff App</title>
 
   <script>
     function openApp() {
-      // Try to open the app using the custom scheme
-      window.location = "histaff://";
+      var now = Date.now();
+      var iframe = document.createElement("iframe");
 
-      // If app is NOT installed, redirect to store after delay
+      // Hidden iframe – method WORKS on more browsers
+      iframe.style.display = "none";
+      iframe.src = "histaff://";
+      document.body.appendChild(iframe);
+
       setTimeout(function () {
-        // iOS
-        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-          window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
+        // If app didn't open after ~1500ms => fallback to store
+        if (Date.now() - now < 1500) {
+          if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
+          } else {
+            window.location = "https://play.google.com/store/apps/details?id=com.histaff";
+          }
         }
-        // Android
-        else {
-          window.location = "https://play.google.com/store/apps/details?id=com.histaff";
-        }
-      }, 1200); // Delay before fallback (1.2 seconds)
+      }, 1500);
     }
   </script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 50px;
-    }
-    h2 {
-      color: #333;
-    }
-  </style>
 </head>
 
 <body onload="openApp()">
   <h2>Đang mở ứng dụng HiStaff...</h2>
-  <p>Nếu ứng dụng không mở, bạn sẽ được chuyển tới App Store / Play Store.</p>
+  <p>Nếu ứng dụng không mở, bạn sẽ được chuyển đến cửa hàng cài đặt.</p>
 </body>
 </html>

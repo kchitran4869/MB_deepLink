@@ -19,7 +19,8 @@
 
     // --- iOS Deep Linking ---
     if (isIOS) {
-      window.location = "org.reactjs.native.HiStaffOf://";
+      //window.location = "org.reactjs.native.HiStaffOf://";      
+      window.location = "org.reactjs.native.HiStaffOf://approval";
 
       setTimeout(() => {
         window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
@@ -30,7 +31,9 @@
 
     // --- ANDROID DEEP LINKING ---
     // 1. Thử mở app bằng custom scheme
-    window.location = "histaff://";
+    
+    //window.location = "histaff://";
+    window.location = "histaff://approval";
 
     // 2. Dùng intent:// fallback nếu app không cài
     setTimeout(() => {

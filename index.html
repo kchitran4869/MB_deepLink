@@ -6,6 +6,12 @@
   <title>Open HiStaff App</title>
 
 <script>
+  
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+  
   function openApp() {
     const ua = navigator.userAgent;
     const isIOS = /iPhone|iPad|iPod/i.test(ua);

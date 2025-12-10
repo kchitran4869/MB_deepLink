@@ -6,23 +6,24 @@
   <title>Open HiStaff App</title>
 
 <script>
-  
   function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
   }
-  
+
   function openApp() {
     const ua = navigator.userAgent;
     const isIOS = /iPhone|iPad|iPod/i.test(ua);
     const isAndroid = /Android/i.test(ua);
-
     
     const paramValue = getQueryParam('param');
+    console.log("paramvnm", paramValue);
     
-    console.log("paramvnm",paramValue);
+    const val = (paramValue === 'LEAVE') ? 'approveleave' : 
+                (paramValue === 'OVERTIME') ? 'approveot' : 
+                (paramValue ? 'approvedmvs' : 'approval');
 
-    // Device không phải mobile → mở web
+    // Device is not mobile → open web
     if (!isIOS && !isAndroid) {
       window.location = "https://hs-portal.vinamilk.com.vn/Attendance/ApproveInfo";
       return;
@@ -30,8 +31,7 @@
 
     // --- iOS Deep Linking ---
     if (isIOS) {
-      //window.location = "org.reactjs.native.HiStaffOf://";      
-      window.location = "org.reactjs.native.HiStaffOf://approval";
+      window.location = "org.reactjs.native.HiStaffOf://" + val;
 
       setTimeout(() => {
         window.location = "https://apps.apple.com/us/app/histaff/id1485982149";
@@ -41,15 +41,11 @@
     }
 
     // --- ANDROID DEEP LINKING ---
-    // 1. Thử mở app bằng custom scheme
-    
-    //window.location = "histaff://";
-    window.location = "histaff://approval";
+    window.location = "histaff://" + val;
 
-    // 2. Dùng intent:// fallback nếu app không cài
+    // Fallback for when the app isn't installed
     setTimeout(() => {
-      window.location = 
-        "intent://#Intent;scheme=histaff;package=com.histaff;end;";
+      window.location = "intent://#Intent;scheme=histaff;package=com.histaff;end;";
     }, 800);
   }
 </script>

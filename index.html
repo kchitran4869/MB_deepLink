@@ -17,11 +17,9 @@
     const isAndroid = /Android/i.test(ua);
     
     const paramValue = getQueryParam('param');
-    console.log("paramvnm", paramValue);
+    //console.log("paramvnm", paramValue);
     
-    const val = (paramValue === 'LEAVE') ? 'approveleave' : 
-                (paramValue === 'OVERTIME') ? 'approveot' : 
-                (paramValue ? 'approvedmvs' : 'approval');
+    const val = paramValue ? paramValue : 'approval';
 
     // Device is not mobile → open web
     if (!isIOS && !isAndroid) {
